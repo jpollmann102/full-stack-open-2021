@@ -8,6 +8,16 @@ const Button = ({ text, handleClick }) => (
 
 const Statistics = ({ good, bad, neutral, allFeedback }) => {
 
+  if(allFeedback.length === 0)
+  {
+    return (
+      <>
+        <h1>statistics</h1>
+        <p>No feedback given</p>
+      </>
+    )
+  }
+
   const averageFeedback = () => {
     if(allFeedback.length === 0) return 0;
     return allFeedback.reduce((a,b) => a + b, 0) / allFeedback.length;
