@@ -6,6 +6,26 @@ const Button = ({ text, handleClick }) => (
   </button>
 )
 
+const Statistics = ({ good, bad, neutral, allFeedback }) => {
+
+  const averageFeedback = () => {
+    if(allFeedback.length === 0) return 0;
+    return allFeedback.reduce((a,b) => a + b, 0) / allFeedback.length;
+  }
+
+  return (
+    <>
+      <h1>statistics</h1>
+      <p>good { good }</p>
+      <p>neutral { neutral }</p>
+      <p>bad { bad }</p>
+      <p>all { allFeedback.length }</p>
+      <p>average { averageFeedback() }</p>
+      <p>positive { allFeedback.length > 0 ? (good / allFeedback.length)*100 : 0 } %</p>
+    </>
+  )
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0);
@@ -28,24 +48,18 @@ const App = () => {
     setAll(allFeedback.concat(-1));
   };
 
-  const averageFeedback = () => {
-    if(allFeedback.length === 0) return 0;
-    return allFeedback.reduce((a,b) => a + b, 0) / allFeedback.length;
-  }
-
   return (
     <div>
       <h1>give feedback</h1>
       <Button text="good" handleClick={ handleGoodClick } />
       <Button text="neutral" handleClick={ handleNeutralClick } />
       <Button text="bad" handleClick={ handleBadClick } />
-      <h1>statistics</h1>
-      <p>good { good }</p>
-      <p>neutral { neutral }</p>
-      <p>bad { bad }</p>
-      <p>all { allFeedback.length }</p>
-      <p>average { averageFeedback() }</p>
-      <p>positive { allFeedback.length > 0 ? (good / allFeedback.length)*100 : 0 } %</p>
+      <Statistics
+        good={ good }
+        neutral={ neutral }
+        bad={ bad }
+        allFeedback={ allFeedback }
+      />
     </div>
   )
 }
