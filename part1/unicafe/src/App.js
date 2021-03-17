@@ -11,10 +11,10 @@ const Statistics = ({ good, bad, neutral, allFeedback }) => {
   if(allFeedback.length === 0)
   {
     return (
-      <>
+      <div>
         <h1>statistics</h1>
         <p>No feedback given</p>
-      </>
+      </div>
     )
   }
 
@@ -24,17 +24,24 @@ const Statistics = ({ good, bad, neutral, allFeedback }) => {
   }
 
   return (
-    <>
+    <div>
       <h1>statistics</h1>
-      <p>good { good }</p>
-      <p>neutral { neutral }</p>
-      <p>bad { bad }</p>
-      <p>all { allFeedback.length }</p>
-      <p>average { averageFeedback() }</p>
-      <p>positive { allFeedback.length > 0 ? (good / allFeedback.length)*100 : 0 } %</p>
-    </>
+      <Statistic text="good" value={ good } />
+      <Statistic text="neutral" value={ neutral } />
+      <Statistic text="bad" value={ bad } />
+      <Statistic text="all" value={ allFeedback.length } />
+      <Statistic text="average" value={ averageFeedback() } />
+      <Statistic
+        text="positive"
+        value={ allFeedback.length > 0 ? (good / allFeedback.length)*100 : 0 }
+      />
+    </div>
   )
 }
+
+const Statistic = ({ text, value }) => (
+  <p>{ text } { value }</p>
+)
 
 const App = () => {
   // save clicks of each button to its own state
