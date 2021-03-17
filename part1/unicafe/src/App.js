@@ -26,21 +26,28 @@ const Statistics = ({ good, bad, neutral, allFeedback }) => {
   return (
     <div>
       <h1>statistics</h1>
-      <Statistic text="good" value={ good } />
-      <Statistic text="neutral" value={ neutral } />
-      <Statistic text="bad" value={ bad } />
-      <Statistic text="all" value={ allFeedback.length } />
-      <Statistic text="average" value={ averageFeedback() } />
-      <Statistic
-        text="positive"
-        value={ allFeedback.length > 0 ? (good / allFeedback.length)*100 : 0 }
-      />
+      <table>
+        <tbody>
+          <Statistic text="good" value={ good } />
+          <Statistic text="neutral" value={ neutral } />
+          <Statistic text="bad" value={ bad } />
+          <Statistic text="all" value={ allFeedback.length } />
+          <Statistic text="average" value={ averageFeedback() } />
+          <Statistic
+            text="positive"
+            value={ allFeedback.length > 0 ? (good / allFeedback.length)*100 : 0 }
+          />
+        </tbody>
+      </table>
     </div>
   )
 }
 
 const Statistic = ({ text, value }) => (
-  <p>{ text } { value }</p>
+  <tr>
+    <td>{ text }</td>
+    <td>{ value }</td>
+  </tr>
 )
 
 const App = () => {
