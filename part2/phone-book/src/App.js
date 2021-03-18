@@ -3,6 +3,7 @@ import numberService from './services/numbers';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
+import Notification from './components/Notification';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]);
@@ -10,6 +11,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ searchName, setSearchName ] = useState('');
+  const [ notificationMessage, setNotificationMessage ] = useState(null);
+  const [ notificationClass, setNotificationClass ] = useState('error');
 
   useEffect(() => {
     numberService.getAll()
@@ -44,6 +47,11 @@ const App = () => {
       setShowPersons(persons.concat(newPerson).filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
       setNewName('');
       setNewNumber('');
+      setNotificationMessage(`Added ${newPerson.name}`);
+      setNotificationClass('success');
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 5000);
     })
     .catch(error => alert(`could not create ${newPersonObject.name}`));
   }
@@ -58,7 +66,13 @@ const App = () => {
         setPersons(newPersons);
         setShowPersons(newPersons.filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
       })
-      .catch(error => alert(`could not delete ${personToDelete.name}`));
+      .catch(error => {
+        setNotificationMessage(`Information of ${personToDelete.name} has already been deleted`);
+        setNotificationClass('error');
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
+      });
     }
   }
 
@@ -98,6 +112,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification
+        message={ notificationMessage }
+        className={ notificationClass }
+      />
       <Filter
         searchValue={ searchName }
         handleSearchChangeCallback={ handleSearchChange }
