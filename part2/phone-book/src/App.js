@@ -48,6 +48,20 @@ const App = () => {
     .catch(error => alert(`could not create ${newPersonObject.name}`));
   }
 
+  const deletePerson = (id) => {
+    const personToDelete = persons.find(x => x.id === id);
+    if(window.confirm(`Delete ${personToDelete.name}?`))
+    {
+      numberService.deletePerson(id)
+      .then(deletedPerson => {
+        const newPersons = persons.filter(x => x.id !== id);
+        setPersons(newPersons);
+        setShowPersons(newPersons.filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
+      })
+      .catch(error => alert(`could not delete ${personToDelete.name}`));
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   }
@@ -78,7 +92,10 @@ const App = () => {
         handleNumberChangeCallback={ handleNumberChange }
       />
       <h2>Numbers</h2>
-      <Persons persons={ showPersons } />
+      <Persons
+        persons={ showPersons }
+        handleDeleteClickedCallback={ deletePerson }
+      />
     </div>
   )
 }
