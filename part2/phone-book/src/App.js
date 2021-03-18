@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import numberService from './services/numbers';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
@@ -11,15 +11,14 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('');
   const [ searchName, setSearchName ] = useState('');
 
-  const getPersons = () => {
-    axios.get('http://localhost:3001/persons')
-    .then(response => {
-      setPersons(response.data);
-      setShowPersons(response.data);
-    });
-  }
-
-  useEffect(getPersons, []);
+  useEffect(() => {
+    numberService.getAll()
+    .then(initialNumbers => {
+      setPersons(initialNumbers);
+      setShowPersons(initialNumbers);
+    })
+    .catch(error => alert('could not fetch all numbers'));
+  }, []);
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -39,10 +38,14 @@ const App = () => {
       number: newNumber
     };
 
-    setPersons(persons.concat(newPersonObject));
-    setShowPersons(persons.concat(newPersonObject).filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
-    setNewName('');
-    setNewNumber('');
+    numberService.create(newPersonObject)
+    .then(newPerson => {
+      setPersons(persons.concat(newPerson));
+      setShowPersons(persons.concat(newPerson).filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
+      setNewName('');
+      setNewNumber('');
+    })
+    .catch(error => alert(`could not create ${newPersonObject.name}`));
   }
 
   const handleNameChange = (event) => {
