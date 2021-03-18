@@ -25,7 +25,7 @@ const App = () => {
 
     if(persons.some(x => x.name === newName))
     {
-      window.alert(`${newName} is already added to phonebook`);
+      updatePerson();
       return;
     }else if(newName === '' || newNumber === '')
     {
@@ -59,6 +59,25 @@ const App = () => {
         setShowPersons(newPersons.filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
       })
       .catch(error => alert(`could not delete ${personToDelete.name}`));
+    }
+  }
+
+  const updatePerson = () => {
+    const person = persons.find(p => p.name === newName);
+    if(window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`))
+    {
+      const changedPerson = { ...person, number: newNumber };
+
+      numberService.update(person.id, changedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson));
+        setShowPersons(persons.map(p => p.id !== person.id ? p : returnedPerson).filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
+      })
+      .catch(error => {
+        alert(`an error occurred with updating '${person.content}'`);
+        setPersons(persons.filter(n => n.id !== person.id));
+        setShowPersons(persons.filter(n => n.id !== person.id));
+      });
     }
   }
 
