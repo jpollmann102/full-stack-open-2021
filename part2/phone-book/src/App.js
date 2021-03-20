@@ -53,7 +53,7 @@ const App = () => {
         setNotificationMessage(null);
       }, 5000);
     })
-    .catch(error => alert(`could not create ${newPersonObject.name}`));
+    .catch(error => alert(`could not create ${newPersonObject.name} - ${error.response.data}`));
   }
 
   const deletePerson = (id) => {
@@ -78,11 +78,9 @@ const App = () => {
 
   const updatePerson = () => {
     const person = persons.find(p => p.name === newName);
-    console.log('person to update', person);
     if(window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`))
     {
       const changedPerson = { ...person, number: newNumber };
-      console.log('object being sent', changedPerson);
 
       numberService.update(person.id, changedPerson)
       .then(returnedPerson => {
