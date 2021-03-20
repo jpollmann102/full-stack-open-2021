@@ -26,11 +26,7 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    if(persons.some(x => x.name === newName))
-    {
-      updatePerson();
-      return;
-    }else if(newName === '' || newNumber === '')
+    if(newName === '' || newNumber === '')
     {
       window.alert('Please enter both a name and number');
       return;
@@ -76,24 +72,24 @@ const App = () => {
     }
   }
 
-  const updatePerson = () => {
-    const person = persons.find(p => p.name === newName);
-    if(window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`))
-    {
-      const changedPerson = { ...person, number: newNumber };
-
-      numberService.update(person.id, changedPerson)
-      .then(returnedPerson => {
-        setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson));
-        setShowPersons(persons.map(p => p.id !== person.id ? p : returnedPerson).filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
-      })
-      .catch(error => {
-        alert(`an error occurred with updating '${person.content}'`);
-        setPersons(persons.filter(n => n.id !== person.id));
-        setShowPersons(persons.filter(n => n.id !== person.id));
-      });
-    }
-  }
+  // const updatePerson = () => {
+  //   const person = persons.find(p => p.name === newName);
+  //   if(window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`))
+  //   {
+  //     const changedPerson = { ...person, number: newNumber };
+  //
+  //     numberService.update(person.id, changedPerson)
+  //     .then(returnedPerson => {
+  //       setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson));
+  //       setShowPersons(persons.map(p => p.id !== person.id ? p : returnedPerson).filter(x => x.name.toLowerCase().includes(searchName.toLowerCase())));
+  //     })
+  //     .catch(error => {
+  //       alert(`an error occurred with updating '${person.content}'`);
+  //       setPersons(persons.filter(n => n.id !== person.id));
+  //       setShowPersons(persons.filter(n => n.id !== person.id));
+  //     });
+  //   }
+  // }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
